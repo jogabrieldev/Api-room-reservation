@@ -22,6 +22,9 @@ public class Sala {
     @Column(nullable = false, unique = true, length = 100)
     private String nome;
 
+    @Column(length = 500)
+    private String descricao;
+
     @Column(nullable = false)
     private Integer capacidade;
 
@@ -38,7 +41,12 @@ public class Sala {
     }
 
     public Sala(String nome, Integer capacidade, String localizacao) {
+        this(nome, null, capacidade, localizacao);
+    }
+
+    public Sala(String nome, String descricao, Integer capacidade, String localizacao) {
         this.nome = nome;
+        this.descricao = descricao;
         this.capacidade = capacidade;
         this.localizacao = localizacao;
     }
@@ -53,6 +61,14 @@ public class Sala {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Integer getCapacidade() {

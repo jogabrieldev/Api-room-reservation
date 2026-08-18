@@ -10,14 +10,16 @@ import jakarta.persistence.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(nullable = false, length = 100)
     private String nome;
@@ -40,7 +42,7 @@ public class Usuario {
         this.telefone = telefone;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 

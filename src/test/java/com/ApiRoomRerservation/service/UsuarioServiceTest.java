@@ -3,6 +3,7 @@ package com.ApiRoomRerservation.service;
 import com.ApiRoomRerservation.dto.CadastrarUsuarioRequest;
 import com.ApiRoomRerservation.dto.UsuarioResponse;
 import com.ApiRoomRerservation.entity.Usuario;
+import com.ApiRoomRerservation.exception.BusinessException;
 import com.ApiRoomRerservation.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,8 +11,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -71,12 +70,12 @@ class UsuarioServiceTest {
         );
         when(usuarioRepository.existsByEmailIgnoreCase("joao@email.com")).thenReturn(true);
 
-        ResponseStatusException exception = assertThrows(
-                ResponseStatusException.class,
+        BusinessException exception = assertThrows(
+                BusinessException.class,
                 () -> usuarioService.cadastrar(request)
         );
 
-        assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
+        assertEquals("Já existe um usuário com este e-mail.", exception.getMessage());
         verify(usuarioRepository, never()).save(any(Usuario.class));
     }
 }

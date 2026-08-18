@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
@@ -32,9 +33,12 @@ public class Reserva {
     @Column(nullable = false)
     private LocalDateTime fim;
 
+    @Column(name = "criada_em", updatable = false)
+    private LocalDateTime criadaEm;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private StatusReserva status = StatusReserva.PENDENTE;
+    private StatusReserva status = StatusReserva.ATIVA;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -53,6 +57,13 @@ public class Reserva {
         this.fim = fim;
         this.usuario = usuario;
         this.sala = sala;
+    }
+
+    @PrePersist
+    void preencherDataCriacao() {
+        if (criadaEm == null) {
+            criadaEm = LocalDateTime.now();
+        }
     }
 
     public Long getId() {
@@ -77,6 +88,10 @@ public class Reserva {
 
     public LocalDateTime getFim() {
         return fim;
+    }
+
+    public LocalDateTime getCriadaEm() {
+        return criadaEm;
     }
 
     public void setFim(LocalDateTime fim) {
